@@ -9,26 +9,47 @@ const Jwt = require('@hapi/jwt');
 const pool = require('./database/postgres/pool');
 
 // service (repository, helper, manager, etc)
-const UserRepository = require('../Domains/users/UserRepository');
 const PasswordHash = require('../Applications/security/PasswordHash');
-const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres');
 const BcryptPasswordHash = require('./security/BcryptPasswordHash');
+
+// Repository
+const UserRepository = require('../Domains/users/UserRepository');
+const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres');
+
+const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository');
+const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
+
+const ThreadRepository = require('../Domains/threads/ThreadRepository')
+const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres')
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
 const AuthenticationTokenManager = require('../Applications/security/AuthenticationTokenManager');
 const JwtTokenManager = require('./security/JwtTokenManager');
 const LoginUserUseCase = require('../Applications/use_case/LoginUserUseCase');
-const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository');
-const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
 const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
 const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
+const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
 
 // creating container
 const container = createContainer();
 
 // registering services and repository
 container.register([
+  {
+    key: ThreadRepository.name,
+    Class: ThreadRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        },
+      ],
+    },
+  },
   {
     key: UserRepository.name,
     Class: UserRepositoryPostgres,
@@ -80,6 +101,19 @@ container.register([
 
 // registering use cases
 container.register([
+  {
+    key: AddThreadUseCase.name,
+    Class: AddThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+      ],
+    },
+  },
   {
     key: AddUserUseCase.name,
     Class: AddUserUseCase,
