@@ -18,7 +18,9 @@ class ThreadsHandler {
 
         return {
             status: 'success',
-            data: { thread }
+            data: {
+                thread
+            }
         }
     }
 
