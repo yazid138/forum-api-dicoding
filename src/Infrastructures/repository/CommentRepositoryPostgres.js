@@ -53,8 +53,8 @@ class CommentRepositoryPostgres extends CommentRepository {
         await this.verifyCommentId(commentId)
         await this.verifyUserId(deleteComment);
         const query = {
-            text: 'DELETE FROM comments WHERE id = $1 RETURNING id',
-            values: [commentId],
+            text: 'UPDATE comments SET content = $1 WHERE id = $2',
+            values: ['**komentar telah dihapus**', commentId],
         }
 
         return (await this._pool.query(query)).rowCount;
