@@ -17,7 +17,7 @@ describe('ThreadRepositoryPostgres', () => {
         await pool.end();
     });
 
-    describe('verify Available Thread Id function', () => {
+    describe('verify Thread Id function', () => {
         it('should throw InvariantError when id not available', async () => {
             // Arrange
             const registerUser = new RegisterUser({
@@ -36,7 +36,7 @@ describe('ThreadRepositoryPostgres', () => {
             const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
             // Action & Assert
-            await expect(threadRepositoryPostgres.verifyAvailableId('thread-123')).rejects.toThrowError(InvariantError);
+            await expect(threadRepositoryPostgres.verifyThreadId('thread-123')).rejects.toThrowError(InvariantError);
         });
 
         it('should not throw InvariantError when id available', async () => {
@@ -44,7 +44,7 @@ describe('ThreadRepositoryPostgres', () => {
             const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
             // Action & Assert
-            await expect(threadRepositoryPostgres.verifyAvailableId('thread-123')).resolves.not.toThrowError(InvariantError);
+            await expect(threadRepositoryPostgres.verifyThreadId('thread-123')).resolves.not.toThrowError(InvariantError);
         });
     });
 
