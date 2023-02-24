@@ -1,5 +1,6 @@
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
+const CreatedThread = require('../../Domains/threads/entities/CreatedThread')
 
 class ThreadRepositoryPostgres extends ThreadRepository {
     constructor(pool, idGenerator) {
@@ -31,7 +32,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
             values: [id, title, body, userId, date],
         };
 
-        return (await this._pool.query(query)).rows[0];
+        return new CreatedThread((await this._pool.query(query)).rows[0]);
     }
 }
 

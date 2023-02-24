@@ -24,7 +24,7 @@ describe('a CreateThread entities', () => {
         expect(() => new CreateThread(payload)).toThrowError('CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 
-    it('should throw error when username contains more than 50 character', () => {
+    it('should throw error when title contains more than 50 character', () => {
         // Arrange
         const payload = {
             title: 'dicodingindonesiadicodingindonesiadicodingindonesiadicoding',
@@ -36,7 +36,7 @@ describe('a CreateThread entities', () => {
         expect(() => new CreateThread(payload)).toThrowError('CREATE_THREAD.TITLE_LIMIT_CHAR');
     });
 
-    it('should create registerUser object correctly', () => {
+    it('should create createdThread object correctly', () => {
         // Arrange
         const payload = {
             title: 'dicoding',
@@ -45,11 +45,11 @@ describe('a CreateThread entities', () => {
         };
 
         // Action
-        const { username, fullname, password } = new CreateThread(payload);
+        const { title, body, userId } = new CreateThread(payload);
 
         // Assert
-        expect(username).toEqual(payload.username);
-        expect(fullname).toEqual(payload.fullname);
-        expect(password).toEqual(payload.password);
+        expect(title).toEqual(payload.title);
+        expect(body).toEqual(payload.body);
+        expect(userId).toEqual(payload.userId);
     });
 });
