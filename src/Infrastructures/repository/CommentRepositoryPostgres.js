@@ -10,10 +10,10 @@ class CommentRepositoryPostgres extends CommentRepository {
         this._idGenerator = idGenerator;
     }
 
-    async verifyUserId({ userId, commentId, threadId }) {
+    async verifyUserId({ userId, commentId }) {
         const query = {
-            text: 'SELECT id FROM comments WHERE user_id = $1 AND id = $2 AND thread_id = $3',
-            values: [userId, commentId, threadId],
+            text: 'SELECT id FROM comments WHERE user_id = $1 AND id = $2',
+            values: [userId, commentId],
         };
 
         const { rowCount } = await this._pool.query(query);
