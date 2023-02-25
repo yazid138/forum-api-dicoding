@@ -5,43 +5,44 @@ const container = require('../../container');
 const createServer = require('../createServer');
 
 describe('/threads endpoint', () => {
-    afterAll(async () => {
-        await pool.end();
-    });
 
-    afterEach(async () => {
+    let server = null;
+    let accessToken = '';
+    beforeAll(async () => {
+        server = await createServer(container);
+
+        // add user
+        await server.inject({
+            method: 'POST',
+            url: '/users',
+            payload: {
+                username: 'dicoding1',
+                password: 'secret',
+                fullname: 'Dicoding Indonesia',
+            },
+        });
+
+        // login
+        const login = await server.inject({
+            method: 'POST',
+            url: '/authentications',
+            payload: {
+                username: 'dicoding1',
+                password: 'secret',
+            },
+        });
+
+        accessToken = JSON.parse(login.payload).data.accessToken
+    })
+
+    afterAll(async () => {
         await ThreadsTableTestHelper.cleanTable();
         await UsersTableTestHelper.cleanTable();
+        await pool.end();
     });
 
     describe('when POST /threads', () => {
         it('should response 201 and persisted threads', async () => {
-            // Arrange
-            const server = await createServer(container);
-
-            // add user
-            await server.inject({
-                method: 'POST',
-                url: '/users',
-                payload: {
-                    username: 'dicoding',
-                    password: 'secret',
-                    fullname: 'Dicoding Indonesia',
-                },
-            });
-
-            // login
-            const login = await server.inject({
-                method: 'POST',
-                url: '/authentications',
-                payload: {
-                    username: 'dicoding',
-                    password: 'secret',
-                },
-            });
-
-            const loginJson = JSON.parse(login.payload);
-
             // Action
             const response = await server.inject({
                 method: 'POST',
@@ -51,7 +52,7 @@ describe('/threads endpoint', () => {
                     body: 'secret',
                 },
                 headers: {
-                    Authorization: `Bearer ${loginJson.data.accessToken}`
+                    Authorization: `Bearer ${accessToken}`
                 }
             });
 
