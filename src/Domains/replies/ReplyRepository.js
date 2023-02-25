@@ -1,11 +1,19 @@
-class ThreadRepository {
-    async addThread(createThread) {
-        throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+class ReplyRepository {
+    async verifyUserId({ userId, replyId }) {
+        throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     }
 
-    async verifyAvailableId(id) {
-        throw new Error('THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    async verifyReplyId(id) {
+        throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    }
+
+    async addReplyComment({ userId, commentId, content }) {
+        throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    }
+
+    async removeReplyComment(deleteReply) {
+        throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     }
 }
 
-module.exports = ThreadRepository;
+module.exports = ReplyRepository;

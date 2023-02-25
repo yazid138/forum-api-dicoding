@@ -2,13 +2,13 @@ const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 const CreatedThread = require('../../Domains/threads/entities/CreatedThread');
 const OneThread = require('../../Domains/threads/entities/OneThread');
-const OneComment = require('../../Domains/comments/entities/OneComment');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
-    constructor(pool, idGenerator) {
+    constructor(pool, idGenerator, commentRepository) {
         super();
         this._pool = pool;
         this._idGenerator = idGenerator;
+        this._commentRepository = commentRepository;
     }
 
     async verifyThreadId(id) {
@@ -39,17 +39,13 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     async getThreadById(id) {
         await this.verifyThreadId(id);
 
-        let query = {
+        const query = {
             text: 'SELECT a.*, b.username FROM threads a JOIN users b ON a.user_id = b.id WHERE a.id = $1',
             values: [id]
         }
         const thread = new OneThread((await this._pool.query(query)).rows[0]);
 
-        query = {
-            text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.thread_id = $1',
-            values: [thread.id],
-        }
-        const comments = (await this._pool.query(query)).rows.map(e => new OneComment(e));
+        const comments = (await this._commentRepository.getCommentByThreadId(thread.id));
 
         return { ...thread, comments }
     }

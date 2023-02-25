@@ -1,4 +1,4 @@
-class OneThread {
+class OneComment {
     constructor(payload) {
         this._verifyPayload(payload);
 
@@ -21,4 +21,4 @@ class OneThread {
     }
 }
 
-module.exports = OneThread;
+module.exports = OneComment;
