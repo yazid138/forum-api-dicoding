@@ -1,4 +1,8 @@
 class ReplyRepository {
+    async getReplyByCommentId(commentId) {
+        throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    }
+
     async verifyUserId({ userId, replyId }) {
         throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     }

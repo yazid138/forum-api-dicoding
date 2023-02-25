@@ -12,11 +12,11 @@ class OneComment {
 
     _verifyPayload({ id, content, date, username }) {
         if (!id || !content || !date || !username) {
-            throw new Error('CREATE_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+            throw new Error('ONE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
         if (typeof id !== 'string' || typeof content !== 'string' || typeof date !== 'object' || typeof username !== 'string') {
-            throw new Error('CREATE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+            throw new Error('ONE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
     }
 }

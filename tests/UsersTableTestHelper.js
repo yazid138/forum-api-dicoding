@@ -6,11 +6,11 @@ const UsersTableTestHelper = {
     id = 'user-123', username = 'dicoding', password = 'secret', fullname = 'Dicoding Indonesia',
   }) {
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4)',
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id',
       values: [id, username, password, fullname],
     };
 
-    await pool.query(query);
+    return (await pool.query(query)).rows[0];
   },
 
   async findUsersById(id) {

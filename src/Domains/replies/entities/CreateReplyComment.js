@@ -11,11 +11,11 @@ class CreateReplyComment {
 
     _verifyPayload({ commentId, content, userId }) {
         if (!commentId || !content || !userId) {
-            throw new Error('CREATE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
+            throw new Error('CREATE_REPLY_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
         if (typeof commentId !== 'string' || typeof content !== 'string' || typeof userId !== 'string') {
-            throw new Error('CREATE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
+            throw new Error('CREATE_REPLY_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
     }
 }
