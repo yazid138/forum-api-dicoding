@@ -27,7 +27,7 @@ describe('ThreadRepositoryPostgres', () => {
     describe('verifyThreadId function', () => {
 
         let threadRepositoryPostgres = null;
-        beforeAll(() => {
+        beforeEach(() => {
             threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
         })
 
@@ -91,7 +91,7 @@ describe('ThreadRepositoryPostgres', () => {
     describe('getThreadById function', () => {
 
         let threadRepositoryPostgres = null
-        beforeAll(() => {
+        beforeEach(() => {
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {})
             threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
         })
