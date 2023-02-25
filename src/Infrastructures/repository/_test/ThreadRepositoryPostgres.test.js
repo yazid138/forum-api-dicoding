@@ -25,6 +25,12 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     describe('verifyThreadId function', () => {
+
+        let threadRepositoryPostgres = null;
+        beforeAll(() => {
+            threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
+        })
+
         it('should throw NotFoundError when id not exists', async () => {
             // Arrange
             await ThreadsTableTestHelper.addThread({
@@ -34,16 +40,11 @@ describe('ThreadRepositoryPostgres', () => {
                 userId: user.id,
             })
 
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
-
             // Action & Assert
             await expect(threadRepositoryPostgres.verifyThreadId('thread-xxx')).rejects.toThrowError(NotFoundError);
         });
 
         it('should not throw NotFoundError when id available', async () => {
-            // Arrange
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
-
             // Action & Assert
             await expect(threadRepositoryPostgres.verifyThreadId('thread-123')).resolves.not.toThrowError(NotFoundError);
         });
@@ -88,6 +89,13 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     describe('getThreadById function', () => {
+
+        let threadRepositoryPostgres = null
+        beforeAll(() => {
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {})
+            threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
+        })
+
         it('should throw NotFoundError when id not exists', async () => {
             // Arrange
             await ThreadsTableTestHelper.addThread({
@@ -96,27 +104,17 @@ describe('ThreadRepositoryPostgres', () => {
                 body: 'ini adalah body',
                 userId: user.id,
             })
-            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {})
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
 
             // Action & Assert
             await expect(threadRepositoryPostgres.getThreadById('thread-xxx')).rejects.toThrowError(NotFoundError);
         });
 
         it('should not throw NotFoundError when id available', async () => {
-            // Arrange
-            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {})
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
-
             // Action & Assert
             await expect(threadRepositoryPostgres.getThreadById('thread-333')).resolves.not.toThrowError(NotFoundError);
         });
 
         it('should thread object correctly', async () => {
-            // Arrange
-            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {})
-            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
-
             // Action & Assert
             const thread = await threadRepositoryPostgres.getThreadById('thread-333');
             expect(thread.id).toEqual('thread-333');
