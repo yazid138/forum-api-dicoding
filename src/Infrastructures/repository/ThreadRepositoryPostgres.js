@@ -45,7 +45,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
         }
         const thread = new OneThread((await this._pool.query(query)).rows[0]);
 
-        const comments = (await this._commentRepository.getCommentByThreadId(thread.id));
+        const comments = (await this._commentRepository.getAllCommentsByThreadId(thread.id));
 
         return { ...thread, comments }
     }

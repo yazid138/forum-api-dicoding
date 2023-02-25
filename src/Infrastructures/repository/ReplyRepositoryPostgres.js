@@ -11,7 +11,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
         this._idGenerator = idGenerator;
     }
 
-    async getReplyByCommentId(commentId) {
+    async getAllRepliesByCommentId(commentId) {
         const query = {
             text: 'SELECT a.*, b.username FROM replies a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY date ASC',
             values: [commentId],

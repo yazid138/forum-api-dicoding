@@ -12,7 +12,7 @@ class CommentRepositoryPostgres extends CommentRepository {
         this._replyRepository = replyRepository;
     }
 
-    async getCommentByThreadId(threadId) {
+    async getAllCommentsByThreadId(threadId) {
         const query = {
             text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.thread_id = $1 ORDER BY date ASC',
             values: [threadId],
@@ -21,7 +21,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
         return Promise.all(comments.map(async (e) => ({
             ...new OneComment(e),
-            replies: rowCount && await this._replyRepository.getReplyByCommentId(e.id)
+            replies: rowCount && await this._replyRepository.getAllRepliesByCommentId(e.id)
         })));
     }
 
