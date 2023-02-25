@@ -9,12 +9,12 @@ const routes = (handler) => ([
     },
     {
         method: 'GET',
-        path: '/threads/{id}',
+        path: '/threads/{threadId}',
         handler: handler.getThreadHandler,
     },
     {
         method: 'POST',
-        path: '/threads/{id}/comments',
+        path: '/threads/{threadId}/comments',
         handler: handler.postThreadAddCommentHandler,
         options: {
             auth: 'forum_jwt',
@@ -32,6 +32,14 @@ const routes = (handler) => ([
         method: 'DELETE',
         path: '/threads/{threadId}/comments/{commentId}',
         handler: handler.deleteCommentHandler,
+        options: {
+            auth: 'forum_jwt',
+        },
+    },
+    {
+        method: 'DELETE',
+        path: '/threads/{threadId}/comments/{commentId}/replies/{replyId}',
+        handler: handler.deleteReplyCommentHandler,
         options: {
             auth: 'forum_jwt',
         },

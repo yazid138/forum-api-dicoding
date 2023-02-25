@@ -13,7 +13,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     async getReplyByCommentId(commentId) {
         const query = {
-            text: 'SELECT a.*, b.username FROM replies a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1',
+            text: 'SELECT a.*, b.username FROM replies a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY date ASC',
             values: [commentId],
         }
 
