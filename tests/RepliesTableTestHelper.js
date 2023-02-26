@@ -7,7 +7,7 @@ const RepliesTableTestHelper = {
     }) {
         const date = new Date().toISOString()
         const query = {
-            text: 'INSERT INTO replies(id, comment_id, content, user_id, date) VALUES($1, $2, $3, $4, $5) RETURNING id',
+            text: 'INSERT INTO comments(id, comment_id, content, user_id, date) VALUES($1, $2, $3, $4, $5) RETURNING id',
             values: [id, commentId, content, userId, date],
         };
 
@@ -16,7 +16,7 @@ const RepliesTableTestHelper = {
 
     async findRepliesById(id) {
         const query = {
-            text: 'SELECT * FROM replies WHERE id = $1',
+            text: 'SELECT * FROM comments WHERE id = $1',
             values: [id],
         };
 
@@ -25,7 +25,7 @@ const RepliesTableTestHelper = {
     },
 
     async cleanTable() {
-        await pool.query('DELETE FROM replies WHERE 1=1');
+        await pool.query('DELETE FROM comments WHERE 1=1');
     },
 };
 

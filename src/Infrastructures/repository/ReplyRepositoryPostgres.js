@@ -13,7 +13,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     async getAllRepliesByCommentId(commentId) {
         const query = {
-            text: 'SELECT a.*, b.username FROM replies a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY date ASC',
+            text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY date ASC',
             values: [commentId],
         }
         const { rows, rowCount } = await this._pool.query(query);
@@ -25,7 +25,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     async verifyUserId({ userId, replyId }) {
         const query = {
-            text: 'SELECT id FROM replies WHERE user_id = $1 AND id = $2',
+            text: 'SELECT id FROM comments WHERE user_id = $1 AND id = $2',
             values: [userId, replyId],
         };
 
@@ -38,7 +38,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     async verifyReplyId(id) {
         const query = {
-            text: 'SELECT id FROM replies WHERE id = $1',
+            text: 'SELECT id FROM comments WHERE id = $1',
             values: [id],
         };
 
@@ -54,7 +54,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
         const date = new Date().toISOString();
 
         const query = {
-            text: 'INSERT INTO replies(id, comment_id, user_id, content, date) VALUES($1, $2, $3, $4, $5) RETURNING id, content, user_id',
+            text: 'INSERT INTO comments(id, comment_id, user_id, content, date) VALUES($1, $2, $3, $4, $5) RETURNING id, content, user_id',
             values: [id, commentId, userId, content, date],
         };
 
@@ -66,7 +66,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
         await this.verifyReplyId(replyId)
         await this.verifyUserId(deleteReply);
         const query = {
-            text: 'UPDATE replies SET content = $1 WHERE id = $2',
+            text: 'UPDATE comments SET content = $1 WHERE id = $2',
             values: ['**balasan telah dihapus**', replyId],
         }
 
