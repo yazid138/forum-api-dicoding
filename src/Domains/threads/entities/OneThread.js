@@ -1,25 +1,29 @@
 class OneThread {
-    constructor(payload) {
-        this._verifyPayload(payload);
+  constructor(payload) {
+    this._verifyPayload(payload);
 
-        const { id, title, body, date, username } = payload;
+    const {
+      id, title, body, date, username,
+    } = payload;
 
-        this.id = id;
-        this.title = title;
-        this.body = body;
-        this.date = date;
-        this.username = username;
+    this.id = id;
+    this.title = title;
+    this.body = body;
+    this.date = date;
+    this.username = username;
+  }
+
+  _verifyPayload({
+    id, title, body, date, username,
+  }) {
+    if (!id || !title || !body || !date || !username) {
+      throw new Error('ONE_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    _verifyPayload({ id, title, body, date, username }) {
-        if (!id || !title || !body || !date || !username) {
-            throw new Error('ONE_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
-        }
-
-        if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string' || typeof date !== 'object' || typeof username !== 'string') {
-            throw new Error('ONE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
-        }
+    if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string' || typeof date !== 'object' || typeof username !== 'string') {
+      throw new Error('ONE_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
+  }
 }
 
 module.exports = OneThread;

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const AuthenticationRepository = require('../AuthenticationRepository');
 
 describe('AuthenticationRepository interface', () => {

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
 const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser');
 const UserRepository = require('../../../Domains/users/UserRepository');

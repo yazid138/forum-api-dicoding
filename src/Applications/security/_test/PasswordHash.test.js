@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const EncryptionHelper = require('../PasswordHash');
 
 describe('EncryptionHelper interface', () => {

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const AuthenticationTokenManager = require('../AuthenticationTokenManager');
 
 describe('AuthenticationTokenManager interface', () => {

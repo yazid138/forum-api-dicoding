@@ -28,7 +28,7 @@ const auth = async (server, name) => {
       },
     }),
   });
-}
+};
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -36,7 +36,7 @@ const createServer = async (container) => {
     port: process.env.PORT,
   });
 
-  await auth(server, 'forum_jwt')
+  await auth(server, 'forum_jwt');
 
   await server.register([
     {

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const UserRepository = require('../../../Domains/users/UserRepository');
 const AuthenticationRepository = require('../../../Domains/authentications/AuthenticationRepository');
 const AuthenticationTokenManager = require('../../security/AuthenticationTokenManager');

@@ -19,14 +19,14 @@ const UserRepositoryPostgres = require('./repository/UserRepositoryPostgres');
 const AuthenticationRepository = require('../Domains/authentications/AuthenticationRepository');
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
 
-const ThreadRepository = require('../Domains/threads/ThreadRepository')
-const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres')
+const ThreadRepository = require('../Domains/threads/ThreadRepository');
+const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 
-const CommentRepository = require('../Domains/comments/CommentRepository')
-const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres')
+const CommentRepository = require('../Domains/comments/CommentRepository');
+const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres');
 
-const ReplyRepository = require('../Domains/replies/ReplyRepository')
-const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres')
+const ReplyRepository = require('../Domains/replies/ReplyRepository');
+const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres');
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
@@ -75,7 +75,7 @@ container.register([
         {
           name: 'replyRepository',
           internal: ReplyRepository.name,
-        }
+        },
       ],
     },
   },
@@ -92,7 +92,7 @@ container.register([
         },
         {
           name: 'commentRepository',
-          internal: CommentRepository.name
+          internal: CommentRepository.name,
         },
       ],
     },
@@ -165,7 +165,7 @@ container.register([
         {
           name: 'replyRepository',
           internal: ReplyRepository.name,
-        }
+        },
       ],
     },
   },
@@ -186,7 +186,7 @@ container.register([
         {
           name: 'replyRepository',
           internal: ReplyRepository.name,
-        }
+        },
       ],
     },
   },

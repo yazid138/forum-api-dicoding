@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const createServer = require('../createServer');
 
 describe('HTTP server', () => {
