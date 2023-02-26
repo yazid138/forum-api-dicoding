@@ -11,8 +11,7 @@ class AddReplyCommentUseCase {
         const { threadId, commentId } = useCasePayload
         await this._threadRepository.verifyThreadId(threadId);
         await this._commentRepository.verifyCommentId(commentId);
-        const createReplyComment = new CreateReplyComment(useCasePayload);
-        return this._replyRepository.addReplyComment(createReplyComment);
+        return this._replyRepository.addReplyComment(new CreateReplyComment(useCasePayload));
     }
 }
 

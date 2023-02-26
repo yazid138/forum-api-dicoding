@@ -9,8 +9,7 @@ class AddCommentUseCase {
     async execute(useCasePayload) {
         const { threadId } = useCasePayload
         await this._threadRepository.verifyThreadId(threadId);
-        const createComment = new CreateComment(useCasePayload);
-        return this._commentRepository.addComment(createComment);
+        return this._commentRepository.addComment(new CreateComment(useCasePayload));
     }
 }
 
