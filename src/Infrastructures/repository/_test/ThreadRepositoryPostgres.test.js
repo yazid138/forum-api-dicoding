@@ -31,7 +31,7 @@ describe('ThreadRepositoryPostgres', () => {
             threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
         })
 
-        it('should throw NotFoundError when id not exists', async () => {
+        it('should throw NotFoundError when thread id not exists', async () => {
             // Arrange
             await ThreadsTableTestHelper.addThread({
                 id: 'thread-123',
@@ -44,7 +44,7 @@ describe('ThreadRepositoryPostgres', () => {
             await expect(threadRepositoryPostgres.verifyThreadId('thread-xxx')).rejects.toThrowError(NotFoundError);
         });
 
-        it('should not throw NotFoundError when id available', async () => {
+        it('should not throw NotFoundError when thread id exists', async () => {
             // Action & Assert
             await expect(threadRepositoryPostgres.verifyThreadId('thread-123')).resolves.not.toThrowError(NotFoundError);
         });
@@ -103,7 +103,7 @@ describe('ThreadRepositoryPostgres', () => {
             threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
         })
 
-        it('should throw NotFoundError when id not exists', async () => {
+        it('should throw NotFoundError when thread id not exists', async () => {
             // Arrange
             await ThreadsTableTestHelper.addThread(payload)
 
@@ -111,7 +111,7 @@ describe('ThreadRepositoryPostgres', () => {
             await expect(threadRepositoryPostgres.getThreadById('thread-xxx')).rejects.toThrowError(NotFoundError);
         });
 
-        it('should not throw NotFoundError when id available', async () => {
+        it('should not throw NotFoundError when thread id exists', async () => {
             // Action & Assert
             await expect(threadRepositoryPostgres.getThreadById(payload.id)).resolves.not.toThrowError(NotFoundError);
         });

@@ -16,8 +16,11 @@ class ReplyRepositoryPostgres extends ReplyRepository {
             text: 'SELECT a.*, b.username FROM replies a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY date ASC',
             values: [commentId],
         }
+        const { rows, rowCount } = await this._pool.query(query);
 
-        return (await this._pool.query(query)).rows.map(e => new OneComment(e));
+        if (!rowCount) return [];
+
+        return rows.map(e => new OneComment(e));
     }
 
     async verifyUserId({ userId, replyId }) {

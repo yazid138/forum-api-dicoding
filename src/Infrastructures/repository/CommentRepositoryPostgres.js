@@ -19,9 +19,11 @@ class CommentRepositoryPostgres extends CommentRepository {
         }
         const { rows: comments, rowCount } = await this._pool.query(query);
 
+        if (!rowCount) return [];
+
         return Promise.all(comments.map(async (e) => ({
             ...new OneComment(e),
-            replies: rowCount && await this._replyRepository.getAllRepliesByCommentId(e.id)
+            replies: await this._replyRepository.getAllRepliesByCommentId(e.id)
         })));
     }
 
@@ -33,9 +35,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
         const { rowCount } = await this._pool.query(query);
 
-        if (!rowCount) {
-            throw new AuthorizationError('user dilarang');
-        }
+        if (!rowCount) throw new AuthorizationError('user dilarang');
     }
 
     async verifyCommentId(id) {
@@ -46,9 +46,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
         const { rowCount } = await this._pool.query(query);
 
-        if (!rowCount) {
-            throw new NotFoundError('comment_id tidak ada');
-        }
+        if (!rowCount) throw new NotFoundError('comment_id tidak ada');
     }
 
     async addComment({ userId, threadId, content }) {
