@@ -6,7 +6,7 @@ const CreateReplyComment = require('../../../Domains/replies/entities/CreateRepl
 const CreatedComment = require('../../../Domains/comments/entities/CreatedComment')
 
 describe('AddReplyCommentUseCase', () => {
-    it('', async () => {
+    it('should orchestrating the add reply comment action correctly', async () => {
         // Arrange
         const useCasePayload = {
             threadId: 'thread-123',
