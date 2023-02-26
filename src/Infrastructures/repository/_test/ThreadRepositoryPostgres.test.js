@@ -61,6 +61,14 @@ describe('ThreadRepositoryPostgres', () => {
             })
         })
 
+        it('should create thread not correctly', async () => {
+            const fakeIdGenerator = () => '000';
+            const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, {});
+
+            // Action
+            await expect(threadRepositoryPostgres.addThread({})).rejects.toThrowError();
+        });
+
         it('should persist add thread and return thread data correctly', async () => {
             const fakeIdGenerator = () => '111';
             const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, {});

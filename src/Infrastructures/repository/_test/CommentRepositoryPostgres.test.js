@@ -116,7 +116,15 @@ describe('CommentRepositoryPostgres', () => {
             })
         })
 
-        it('should persist add thread and return thread data correctly', async () => {
+        it('should create comment not correctly', async () => {
+            const fakeIdGenerator = () => '000';
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator, {});
+
+            // Action
+            await expect(commentRepositoryPostgres.addComment({})).rejects.toThrowError();
+        });
+
+        it('should persist add comment and return comment data correctly', async () => {
             const fakeIdGenerator = () => '111';
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator, {});
 
@@ -128,7 +136,7 @@ describe('CommentRepositoryPostgres', () => {
             expect(comments).toHaveLength(1);
         });
 
-        it('should return created thread correctly', async () => {
+        it('should return created comment correctly', async () => {
             // Arrange
             const fakeIdGenerator = () => '222'; // stub!
             const threadRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
