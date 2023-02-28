@@ -3,6 +3,7 @@ const AuthorizationError = require('../../Commons/exceptions/AuthorizationError'
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const CreatedComment = require('../../Domains/comments/entities/CreatedComment');
+const OneComment = require('../../Domains/comments/entities/OneComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -20,7 +21,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     if (!rowCount) return [];
 
-    return comments;
+    return comments.map(e => new OneComment(e));
   }
 
   async verifyUserId({ userId, commentId }) {
