@@ -1,8 +1,8 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const InvariantError = require('../../Commons/exceptions/InvariantError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const CreatedComment = require('../../Domains/comments/entities/CreatedComment');
-const OneComment = require('../../Domains/comments/entities/OneComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -54,7 +54,11 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [id, threadId, userId, content, date],
     };
 
-    return new CreatedComment((await this._pool.query(query)).rows[0]);
+    const { rows, rowCount } = await this._pool.query(query)
+
+    if (!rowCount) throw new InvariantError("gagal menambah komentar")
+
+    return new CreatedComment(rows[0]);
   }
 
   async removeComment(commentId) {
@@ -63,7 +67,9 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [true, commentId],
     };
 
-    return (await this._pool.query(query)).rowCount;
+    const { rowCount } = await this._pool.query(query)
+
+    if (!rowCount) throw new InvariantError("gagal menghapus komentar")
   }
 }
 

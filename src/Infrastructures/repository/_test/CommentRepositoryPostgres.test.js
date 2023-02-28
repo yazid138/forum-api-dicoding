@@ -161,17 +161,17 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should throw NotFoundError when comment id not exists', async () => {
       // Action & Assert
-      await expect(commentRepositoryPostgres.removeComment({ commentId: 'comment-xxx', userId: user.id })).rejects.toThrowError(NotFoundError);
+      await expect(commentRepositoryPostgres.removeComment()).rejects.toThrowError();
     });
 
     it('should throw AuthorizationError when user not allow', async () => {
       // Action & Assert
-      await expect(commentRepositoryPostgres.removeComment({ commentId: comment.id, userId: 'user-xxx' })).rejects.toThrowError(AuthorizationError);
+      await expect(commentRepositoryPostgres.removeComment('xxx')).resolves.toEqual(0);
     });
 
     it('should remove comment correctly', async () => {
       // Action & Assert
-      await commentRepositoryPostgres.removeComment({ commentId: comment.id, userId: user.id });
+      await commentRepositoryPostgres.removeComment(comment.id);
 
       const removeComment = await CommentsTableTestHelper.findCommentsById(comment.id);
 

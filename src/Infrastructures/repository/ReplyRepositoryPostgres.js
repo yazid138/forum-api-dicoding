@@ -1,5 +1,6 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const InvariantError = require('../../Commons/exceptions/InvariantError');
 const ReplyRepository = require('../../Domains/replies/ReplyRepository');
 const CreatedComment = require('../../Domains/comments/entities/CreatedComment');
 const OneComment = require('../../Domains/comments/entities/OneComment');
@@ -31,9 +32,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     const { rowCount } = await this._pool.query(query);
 
-    if (!rowCount) {
-      throw new AuthorizationError('user dilarang');
-    }
+    if (!rowCount) throw new AuthorizationError('user dilarang');
   }
 
   async verifyReplyId(id) {
@@ -44,9 +43,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
     const { rowCount } = await this._pool.query(query);
 
-    if (!rowCount) {
-      throw new NotFoundError('reply_id tidak ada');
-    }
+    if (!rowCount) throw new NotFoundError('reply_id tidak ada');
   }
 
   async addReplyComment({ userId, commentId, content }) {
@@ -58,7 +55,11 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       values: [id, commentId, userId, content, date],
     };
 
-    return new CreatedComment((await this._pool.query(query)).rows[0]);
+    const { rows, rowCount } = await this._pool.query(query)
+
+    if(!rowCount) throw new InvariantError("gagal menambah balasan komentar")
+
+    return new CreatedComment(rows[0]);
   }
 
   async removeReplyComment(replyId) {
@@ -67,7 +68,9 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       values: [true, replyId],
     };
 
-    return (await this._pool.query(query)).rowCount;
+    const { rowCount } = await this._pool.query(query)
+
+    if(!rowCount) throw new InvariantError("gagal menghapus balasan komentar")
   }
 }
 
