@@ -5,11 +5,10 @@ const CreatedComment = require('../../Domains/comments/entities/CreatedComment')
 const OneComment = require('../../Domains/comments/entities/OneComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
-  constructor(pool, idGenerator, replyRepository) {
+  constructor(pool, idGenerator) {
     super();
     this._pool = pool;
     this._idGenerator = idGenerator;
-    this._replyRepository = replyRepository;
   }
 
   async getAllCommentsByThreadId(threadId) {
@@ -21,10 +20,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     if (!rowCount) return [];
 
-    return Promise.all(comments.map(async (e) => ({
-      ...new OneComment(e),
-      replies: await this._replyRepository.getAllRepliesByCommentId(e.id),
-    })));
+    return comments.map(async (e) => new OneComment(e));
   }
 
   async verifyUserId({ userId, commentId }) {
@@ -61,13 +57,10 @@ class CommentRepositoryPostgres extends CommentRepository {
     return new CreatedComment((await this._pool.query(query)).rows[0]);
   }
 
-  async removeComment(deleteComment) {
-    const { commentId } = deleteComment;
-    await this.verifyCommentId(commentId);
-    await this.verifyUserId(deleteComment);
+  async removeComment(commentId) {
     const query = {
-      text: 'UPDATE comments SET content = $1 WHERE id = $2',
-      values: ['**komentar telah dihapus**', commentId],
+      text: 'UPDATE comments SET is_delete = $1 WHERE id = $2',
+      values: [true, commentId],
     };
 
     return (await this._pool.query(query)).rowCount;

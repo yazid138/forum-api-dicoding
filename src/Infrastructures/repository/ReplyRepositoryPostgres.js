@@ -61,13 +61,10 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     return new CreatedComment((await this._pool.query(query)).rows[0]);
   }
 
-  async removeReplyComment(deleteReply) {
-    const { replyId } = deleteReply;
-    await this.verifyReplyId(replyId);
-    await this.verifyUserId(deleteReply);
+  async removeReplyComment(replyId) {
     const query = {
-      text: 'UPDATE comments SET content = $1 WHERE id = $2',
-      values: ['**balasan telah dihapus**', replyId],
+      text: 'UPDATE comments SET is_delete = $1 WHERE id = $2',
+      values: [true, replyId],
     };
 
     return (await this._pool.query(query)).rowCount;
