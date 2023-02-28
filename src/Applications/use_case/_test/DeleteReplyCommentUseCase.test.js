@@ -38,8 +38,8 @@ describe('DeleteReplyCommentUseCase', () => {
       .toHaveBeenCalledWith(useCasePayload.threadId);
     expect(mockCommentRepository.verifyCommentId)
       .toHaveBeenCalledWith(useCasePayload.commentId);
-    expect(mockReplyRepository.verifyReplyId).toHaveBeenCalledWith(useCasePayload.replyId)
-    expect(mockReplyRepository.verifyUserId).toHaveBeenCalledWith({ userId: useCasePayload.userId, replyId: useCasePayload.replyId })
+    expect(mockReplyRepository.verifyReplyId).toHaveBeenCalledWith(useCasePayload.replyId);
+    expect(mockReplyRepository.verifyUserId).toHaveBeenCalledWith({ userId: useCasePayload.userId, replyId: useCasePayload.replyId });
     expect(mockReplyRepository.removeReplyComment)
       .toHaveBeenCalledWith(useCasePayload.replyId);
   });

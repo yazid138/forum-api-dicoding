@@ -55,11 +55,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       values: [id, commentId, userId, content, date],
     };
 
-    const { rows, rowCount } = await this._pool.query(query)
-
-    if(!rowCount) throw new InvariantError("gagal menambah balasan komentar")
-
-    return new CreatedComment(rows[0]);
+    return new CreatedComment((await this._pool.query(query)).rows[0]);
   }
 
   async removeReplyComment(replyId) {
@@ -68,9 +64,9 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       values: [true, replyId],
     };
 
-    const { rowCount } = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query);
 
-    if(!rowCount) throw new InvariantError("gagal menghapus balasan komentar")
+    if (!rowCount) throw new InvariantError('gagal menghapus balasan komentar');
   }
 }
 

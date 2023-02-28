@@ -95,7 +95,7 @@ describe('ThreadRepositoryPostgres', () => {
   describe('getThreadById function', () => {
     let thread = {};
     let threadRepositoryPostgres = null;
-    beforeEach(async () => {
+    beforeAll(async () => {
       const payload = {
         id: 'thread-333',
         title: 'ini adalah judul',
@@ -109,22 +109,21 @@ describe('ThreadRepositoryPostgres', () => {
       threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
     });
 
-    it('should not throw NotFoundError when thread id exists', async () => {
+    it('should null when thread id not sent', async () => {
       // Action & Assert
-      await expect(threadRepositoryPostgres.getThreadById()).rejects.toThrowError();
+      await expect(threadRepositoryPostgres.getThreadById()).resolves.toBeNull();
     });
 
     it('should thread object correctly', async () => {
       // Action & Assert
       const {
-        id, comments, title, body, date, username,
+        id, title, body, date, username,
       } = await threadRepositoryPostgres.getThreadById('thread-333');
-      expect(id).toEqual(payload.id);
-      expect(title).toEqual(payload.title);
-      expect(body).toEqual(payload.body);
+      expect(id).toEqual('thread-333');
+      expect(title).toEqual('ini adalah judul');
+      expect(body).toEqual('ini adalah body');
       expect(date).toBeDefined();
-      expect(username).toBeDefined();
-      expect(comments).toHaveLength(0);
+      expect(username).toEqual('dicoding');
     });
   });
 });

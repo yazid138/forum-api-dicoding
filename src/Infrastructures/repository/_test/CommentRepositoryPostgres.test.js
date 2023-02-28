@@ -7,6 +7,7 @@ const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CreateComment = require('../../../Domains/comments/entities/CreateComment');
+const InvariantError = require('../../../Commons/exceptions/InvariantError');
 
 describe('CommentRepositoryPostgres', () => {
   let user = {};
@@ -56,14 +57,12 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     it('should not empty array when id available', async () => {
-      const comment = await commentRepositoryPostgres.getAllCommentsByThreadId(thread.id);
-      expect(comment).toHaveLength(1);
-    });
-
-    it('should comments object correctly', async () => {
       const comment2 = await commentRepositoryPostgres.getAllCommentsByThreadId(thread.id);
+      expect(comment2).toHaveLength(1);
       expect(comment2[0].id).toEqual(comment.id);
-      expect(comment2[0].replies).toHaveLength(0);
+      expect(comment2[0].content).toEqual('ini adalah komentar');
+      expect(comment2[0].date).toBeDefined();
+      expect(comment2[0].username).toEqual('dicoding');
     });
   });
 
@@ -166,7 +165,7 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should throw AuthorizationError when user not allow', async () => {
       // Action & Assert
-      await expect(commentRepositoryPostgres.removeComment('xxx')).resolves.toEqual(0);
+      await expect(commentRepositoryPostgres.removeComment('xxx')).rejects.toThrowError(InvariantError);
     });
 
     it('should remove comment correctly', async () => {
@@ -176,7 +175,7 @@ describe('CommentRepositoryPostgres', () => {
       const removeComment = await CommentsTableTestHelper.findCommentsById(comment.id);
 
       expect(removeComment).toHaveLength(1);
-      expect(removeComment[0].content).toEqual('**komentar telah dihapus**');
+      expect(removeComment[0].is_delete).toEqual(true);
     });
   });
 });

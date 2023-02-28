@@ -32,8 +32,8 @@ describe('DeleteCommentUseCase', () => {
     // Assert
     expect(mockThreadRepository.verifyThreadId)
       .toHaveBeenCalledWith(useCasePayload.threadId);
-    expect(mockCommentRepository.verifyCommentId).toHaveBeenCalledWith(useCasePayload.commentId)
-    expect(mockCommentRepository.verifyUserId).toBeCalledWith({ userId: useCasePayload.userId, commentId: useCasePayload.commentId })
+    expect(mockCommentRepository.verifyCommentId).toHaveBeenCalledWith(useCasePayload.commentId);
+    expect(mockCommentRepository.verifyUserId).toBeCalledWith({ userId: useCasePayload.userId, commentId: useCasePayload.commentId });
     expect(mockCommentRepository.removeComment)
       .toHaveBeenCalledWith(useCasePayload.commentId);
   });

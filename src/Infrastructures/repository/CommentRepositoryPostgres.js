@@ -21,7 +21,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     if (!rowCount) return [];
 
-    return comments.map(e => new OneComment(e));
+    return comments.map((e) => new OneComment(e));
   }
 
   async verifyUserId({ userId, commentId }) {
@@ -55,11 +55,7 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [id, threadId, userId, content, date],
     };
 
-    const { rows, rowCount } = await this._pool.query(query)
-
-    if (!rowCount) throw new InvariantError("gagal menambah komentar")
-
-    return new CreatedComment(rows[0]);
+    return new CreatedComment((await this._pool.query(query)).rows[0]);
   }
 
   async removeComment(commentId) {
@@ -68,9 +64,9 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [true, commentId],
     };
 
-    const { rowCount } = await this._pool.query(query)
+    const { rowCount } = await this._pool.query(query);
 
-    if (!rowCount) throw new InvariantError("gagal menghapus komentar")
+    if (!rowCount) throw new InvariantError('gagal menghapus komentar');
   }
 }
 

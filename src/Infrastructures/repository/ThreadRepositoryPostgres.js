@@ -31,11 +31,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       values: [id, title, body, userId, date],
     };
 
-    const { rows, rowCount } = await this._pool.query(query)
-
-    if (!rowCount) throw new InvariantError("gagal menambahkan thread")
-
-    return new CreatedThread(rows[0]);
+    return new CreatedThread((await this._pool.query(query)).rows[0]);
   }
 
   async getThreadById(id) {
@@ -44,9 +40,9 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       values: [id],
     };
 
-    const { rows, rowCount } = await this._pool.query(query)
+    const { rows, rowCount } = await this._pool.query(query);
 
-    if(!rowCount) return null;
+    if (!rowCount) return null;
 
     return new OneThread(rows[0]);
   }

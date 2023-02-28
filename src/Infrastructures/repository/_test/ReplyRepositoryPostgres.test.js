@@ -7,6 +7,7 @@ const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CreateReplyComment = require('../../../Domains/replies/entities/CreateReplyComment');
+const InvariantError = require('../../../Commons/exceptions/InvariantError');
 
 describe('ReplyRepositoryPostgres', () => {
   let user = {};
@@ -66,11 +67,10 @@ describe('ReplyRepositoryPostgres', () => {
     it('should not empty array when id available', async () => {
       const replies = await replyRepositoryPostgres.getAllRepliesByCommentId(comment.id);
       expect(replies).toHaveLength(1);
-    });
-
-    it('should replies object correctly', async () => {
-      const replies = await replyRepositoryPostgres.getAllRepliesByCommentId(comment.id);
-      expect(replies[0].id).toEqual(reply.id);
+      expect(replies[0].id).toEqual('reply-123');
+      expect(replies[0].username).toEqual('dicoding');
+      expect(replies[0].date).toBeDefined();
+      expect(replies[0].content).toEqual('ini adalah balasan komentar');
     });
   });
 
@@ -165,24 +165,24 @@ describe('ReplyRepositoryPostgres', () => {
       replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
     });
 
-    it('should throw NotFoundError when reply id not exists', async () => {
+    it('should if empty params', async () => {
       // Action & Assert
       await expect(replyRepositoryPostgres.removeReplyComment()).rejects.toThrowError();
     });
 
-    it('should throw AuthorizationError when user not allow', async () => {
+    it('should throw InvariantError remove reply', async () => {
       // Action & Assert
-      await expect(replyRepositoryPostgres.removeReplyComment('xxx')).resolves.toEqual(0);
+      await expect(replyRepositoryPostgres.removeReplyComment('xxx')).rejects.toThrowError(InvariantError);
     });
 
     it('should remove reply correctly', async () => {
-      // Action & Assert
-      await replyRepositoryPostgres.removeReplyComment(reply.id);
+      await expect(replyRepositoryPostgres.removeReplyComment(reply.id)).resolves.not.toThrowError(InvariantError);
 
+      // Action & Assert
       const removeReply = await RepliesTableTestHelper.findRepliesById(reply.id);
 
       expect(removeReply).toHaveLength(1);
-      expect(removeReply[0].content).toEqual('**balasan telah dihapus**');
+      expect(removeReply[0].is_delete).toEqual(true);
     });
   });
 });
