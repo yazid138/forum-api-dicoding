@@ -32,7 +32,7 @@ describe('DeleteReplyCommentUseCase', () => {
     const deletedReply = await deleteReplyCommentUseCase.execute(useCasePayload);
 
     // Assert
-    expect(deletedReply).toEqual(1)
+    expect(deletedReply).toEqual(1);
     expect(mockThreadRepository.verifyThreadId)
       .toHaveBeenCalledWith(useCasePayload.threadId);
     expect(mockCommentRepository.verifyCommentId)

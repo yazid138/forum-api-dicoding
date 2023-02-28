@@ -42,7 +42,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     };
     const { rows: threads, rowCount } = await this._pool.query(query);
 
-    if (!rowCount) return []
+    if (!rowCount) return [];
 
     return new OneThread(threads[0]);
   }

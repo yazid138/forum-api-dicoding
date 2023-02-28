@@ -27,8 +27,8 @@ describe('DeleteCommentUseCase', () => {
     const deletedComment = await deleteCommentUseCase.execute(useCasePayload);
 
     // Assert
-    expect(deletedComment).toEqual(1)
-    
+    expect(deletedComment).toEqual(1);
+
     expect(mockThreadRepository.verifyThreadId)
       .toHaveBeenCalledWith(useCasePayload.threadId);
     expect(mockCommentRepository.removeComment)
