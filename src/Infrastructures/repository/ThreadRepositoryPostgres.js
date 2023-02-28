@@ -40,11 +40,8 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       text: 'SELECT a.*, b.username FROM threads a JOIN users b ON a.user_id = b.id WHERE a.id = $1',
       values: [id],
     };
-    const { rows: threads, rowCount } = await this._pool.query(query);
 
-    if (!rowCount) return [];
-
-    return new OneThread(threads[0]);
+    return new OneThread((await this._pool.query(query)).rows[0]);
   }
 }
 

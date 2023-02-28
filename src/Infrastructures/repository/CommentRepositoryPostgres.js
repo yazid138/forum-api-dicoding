@@ -13,14 +13,14 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getAllCommentsByThreadId(threadId) {
     const query = {
-      text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.thread_id = $1 ORDER BY date ASC',
-      values: [threadId],
+      text: 'SELECT a.id, a.date, CASE WHEN is_delete IS TRUE THEN $1 ELSE a.content END content, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.thread_id = $2 ORDER BY a.date ASC',
+      values: ['**komentar telah dihapus**', threadId],
     };
     const { rows: comments, rowCount } = await this._pool.query(query);
 
     if (!rowCount) return [];
 
-    return comments.map(async (e) => new OneComment(e));
+    return comments;
   }
 
   async verifyUserId({ userId, commentId }) {

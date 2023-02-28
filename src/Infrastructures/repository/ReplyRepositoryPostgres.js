@@ -13,8 +13,8 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getAllRepliesByCommentId(commentId) {
     const query = {
-      text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY date ASC',
-      values: [commentId],
+      text: 'SELECT a.id, a.date, CASE WHEN is_delete IS TRUE THEN $1 ELSE a.content END content, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $2 ORDER BY a.date ASC',
+      values: ['**balasan telah dihapus**', commentId],
     };
     const { rows, rowCount } = await this._pool.query(query);
 
