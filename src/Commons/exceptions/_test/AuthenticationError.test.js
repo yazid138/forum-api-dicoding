@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const AuthenticationError = require('../AuthenticationError');
 const ClientError = require('../ClientError');
 

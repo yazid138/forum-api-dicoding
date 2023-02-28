@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const RegisteredUser = require('../RegisteredUser');
 
 describe('a RegisteredUser entities', () => {

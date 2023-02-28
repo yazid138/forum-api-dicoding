@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const CreateComment = require('../CreateComment');
 
 describe('a CreateComment entities', () => {

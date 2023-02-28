@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const CreateThread = require('../CreateThread');
 
 describe('a CreateThread entities', () => {

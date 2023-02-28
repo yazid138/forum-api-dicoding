@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const ClientError = require('../ClientError');
 const InvariantError = require('../InvariantError');
 

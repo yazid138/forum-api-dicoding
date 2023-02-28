@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const NewAuth = require('../NewAuth');
 
 describe('NewAuth entities', () => {

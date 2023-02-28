@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const DomainErrorTranslator = require('../DomainErrorTranslator');
 const InvariantError = require('../InvariantError');
 

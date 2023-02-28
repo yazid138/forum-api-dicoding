@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const ThreadRepository = require('../ThreadRepository');
 
 describe('ThreadRepository interface', () => {

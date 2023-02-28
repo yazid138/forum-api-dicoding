@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const CreatedComment = require('../CreatedComment');
 
 describe('a CreatedComment entities', () => {

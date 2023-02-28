@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const OneComment = require('../OneComment');
 
 describe('a OneComment entities', () => {

@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const ReplyRepository = require('../ReplyRepository');
 
 describe('ReplyRepository interface', () => {

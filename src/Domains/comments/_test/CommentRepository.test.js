@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const CommentRepository = require('../CommentRepository');
 
 describe('CommentRepository interface', () => {

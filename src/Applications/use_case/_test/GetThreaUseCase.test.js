@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const OneThread = require('../../../Domains/threads/entities/OneThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const GetThreadUseCase = require('../GetThreadUseCase');

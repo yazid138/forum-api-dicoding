@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const UserRepository = require('../UserRepository');
 
 describe('UserRepository interface', () => {

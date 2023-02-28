@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const AuthenticationRepository = require('../../../Domains/authentications/AuthenticationRepository');
 const DeleteAuthenticationUseCase = require('../DeleteAuthenticationUseCase');
 

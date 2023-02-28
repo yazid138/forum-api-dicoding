@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const UserLogin = require('../UserLogin');
 
 describe('UserLogin entities', () => {

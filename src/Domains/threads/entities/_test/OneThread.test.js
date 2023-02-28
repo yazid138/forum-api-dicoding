@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const OneThread = require('../OneThread');
 
 describe('a OneThread entities', () => {

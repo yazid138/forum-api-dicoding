@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const RegisterUser = require('../../../Domains/users/entities/RegisterUser');

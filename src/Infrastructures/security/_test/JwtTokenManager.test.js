@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const Jwt = require('@hapi/jwt');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const JwtTokenManager = require('../JwtTokenManager');

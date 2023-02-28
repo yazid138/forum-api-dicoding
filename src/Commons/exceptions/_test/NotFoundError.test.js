@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const NotFoundError = require('../NotFoundError');
 const ClientError = require('../ClientError');
 
