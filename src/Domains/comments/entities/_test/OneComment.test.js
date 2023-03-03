@@ -7,6 +7,7 @@ describe('a OneComment entities', () => {
       id: 'comment-123',
       content: 'content',
       username: 'dicoding',
+      is_delete: false,
     };
 
     // Action and Assert
@@ -20,19 +21,21 @@ describe('a OneComment entities', () => {
       content: 'content',
       date: '2022-07-02',
       username: 'dicoding',
+      is_delete: false,
     };
 
     // Action and Assert
     expect(() => new OneComment(payload)).toThrowError('ONE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it('should create OneComment object correctly', () => {
+  it('should OneComment object correctly if is_delete false', () => {
     // Arrange
     const payload = {
       id: 'comment-123',
       content: 'content',
       date: new Date(),
       username: 'dicoding',
+      is_delete: false,
     };
 
     // Action
@@ -42,6 +45,28 @@ describe('a OneComment entities', () => {
 
     // Assert
     expect(content).toEqual(payload.content);
+    expect(date).toEqual(payload.date);
+    expect(id).toEqual(payload.id);
+    expect(username).toEqual(payload.username);
+  });
+
+  it('should OneComment object correctly if is_delete true', () => {
+    // Arrange
+    const payload = {
+      id: 'comment-123',
+      content: 'content',
+      date: new Date(),
+      username: 'dicoding',
+      is_delete: true,
+    };
+
+    // Action
+    const {
+      content, date, id, username,
+    } = new OneComment(payload);
+
+    // Assert
+    expect(content).toEqual('**komentar telah dihapus**');
     expect(date).toEqual(payload.date);
     expect(id).toEqual(payload.id);
     expect(username).toEqual(payload.username);

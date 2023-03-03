@@ -4,6 +4,7 @@ const CommentRepository = require('../../../Domains/comments/CommentRepository')
 const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
 const GetThreadUseCase = require('../GetThreadUseCase');
 const OneComment = require('../../../Domains/comments/entities/OneComment');
+const OneReply = require('../../../Domains/replies/entities/OneReply');
 
 describe('GetThreadUseCase', () => {
   it('if comments not empty', async () => {
@@ -18,20 +19,20 @@ describe('GetThreadUseCase', () => {
     });
 
     const mockReplies = [
-      new OneComment({
-        id: 'reply-111', content: 'ini adalah balasan komentar', date: new Date('2023-02-08'), username: 'dicoding2',
+      new OneReply({
+        id: 'reply-111', content: 'ini adalah balasan komentar', date: new Date('2023-02-08'), username: 'dicoding2', is_delete: true,
       }),
-      new OneComment({
-        id: 'reply-222', content: 'ini adalah balasan komentar', date: new Date('2023-02-09'), username: 'dicoding3',
+      new OneReply({
+        id: 'reply-222', content: 'ini adalah balasan komentar', date: new Date('2023-02-09'), username: 'dicoding3', is_delete: false,
       }),
     ];
 
     const mockComments = [
       new OneComment({
-        id: 'comment-111', content: 'ini adalah komentar', date: new Date('2023-02-07'), username: 'dicoding',
+        id: 'comment-111', content: 'ini adalah komentar', date: new Date('2023-02-07'), username: 'dicoding',is_delete: true,
       }),
       new OneComment({
-        id: 'comment-222', content: 'ini adalah komentar', date: new Date('2023-02-08'), username: 'dicoding2',
+        id: 'comment-222', content: 'ini adalah komentar', date: new Date('2023-02-08'), username: 'dicoding2',is_delete: false,
       }),
     ];
 
@@ -64,15 +65,15 @@ describe('GetThreadUseCase', () => {
       comments: [
         {
           id: 'comment-111',
-          content: 'ini adalah komentar',
+          content: '**komentar telah dihapus**',
           date: new Date('2023-02-07'),
           username: 'dicoding',
           replies: [
-            new OneComment({
-              id: 'reply-111', content: 'ini adalah balasan komentar', date: new Date('2023-02-08'), username: 'dicoding2',
+            new OneReply({
+              id: 'reply-111', content: 'ini adalah balasan komentar', date: new Date('2023-02-08'), username: 'dicoding2', is_delete: true,
             }),
-            new OneComment({
-              id: 'reply-222', content: 'ini adalah balasan komentar', date: new Date('2023-02-09'), username: 'dicoding3',
+            new OneReply({
+              id: 'reply-222', content: 'ini adalah balasan komentar', date: new Date('2023-02-09'), username: 'dicoding3', is_delete: false,
             }),
           ],
         },

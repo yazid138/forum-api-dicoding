@@ -8,6 +8,7 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CreateReplyComment = require('../../../Domains/replies/entities/CreateReplyComment');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
+const CreatedComment = require('../../../Domains/comments/entities/CreatedComment');
 
 describe('ReplyRepositoryPostgres', () => {
   let user = {};
@@ -146,6 +147,11 @@ describe('ReplyRepositoryPostgres', () => {
       // Action
       const createdreplyComment = await replyRepositoryPostgres.addReplyComment(createReplyComment);
 
+      expect(createdreplyComment).toStrictEqual(new CreatedComment({
+        id: 'reply-222', 
+        content: createReplyComment.content, 
+        user_id: user.id
+      }))
       expect(createdreplyComment.id).toEqual('reply-222');
       expect(createdreplyComment.owner).toEqual(createReplyComment.userId);
     });

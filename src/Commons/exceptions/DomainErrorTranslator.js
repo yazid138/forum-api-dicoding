@@ -30,6 +30,12 @@ DomainErrorTranslator._directories = {
 
   'CREATE_REPLY_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membalas komentar karena properti yang dibutuhkan tidak ada'),
   'CREATE_REPLY_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membalas komentar karena tipe data tidak sesuai'),
+
+  'ONE_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan id, content, date, username, dan is_delete'),
+  'ONE_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('id, content, dan username harus string, date harus Date, dan is_delete harus boolean'),
+
+  'ONE_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan id, content, date, username, dan is_delete'),
+  'ONE_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('id, content, dan username harus string, date harus Date, dan is_delete harus boolean'),
 };
 
 module.exports = DomainErrorTranslator;

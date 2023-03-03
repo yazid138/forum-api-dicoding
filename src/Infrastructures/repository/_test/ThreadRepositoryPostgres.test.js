@@ -2,6 +2,8 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CreateThread = require('../../../Domains/threads/entities/CreateThread');
+const OneThread = require('../../../Domains/threads/entities/OneThread');
+const CreatedThread = require('../../../Domains/threads/entities/CreatedThread');
 const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
@@ -86,6 +88,11 @@ describe('ThreadRepositoryPostgres', () => {
       // Action
       const createdThread = await threadRepositoryPostgres.addThread(createThread);
 
+      expect(createdThread).toStrictEqual(new CreatedThread({
+        id: 'thread-222',
+        title: createThread.title,
+        user_id: user.id
+      }))
       expect(createdThread.id).toEqual('thread-222');
       expect(createdThread.title).toEqual(createThread.title);
       expect(createdThread.owner).toEqual(user.id);
@@ -93,17 +100,17 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('getThreadById function', () => {
-    let thread = {};
+    let payload = {};
     let threadRepositoryPostgres = null;
     beforeAll(async () => {
-      const payload = {
+      payload = {
         id: 'thread-333',
         title: 'ini adalah judul',
         body: 'ini adalah body',
         userId: user.id,
       };
 
-      thread = await ThreadsTableTestHelper.addThread(payload);
+      await ThreadsTableTestHelper.addThread(payload);
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
       threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
@@ -116,14 +123,20 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should thread object correctly', async () => {
       // Action & Assert
-      const {
-        id, title, body, date, username,
-      } = await threadRepositoryPostgres.getThreadById('thread-333');
-      expect(id).toEqual('thread-333');
-      expect(title).toEqual('ini adalah judul');
-      expect(body).toEqual('ini adalah body');
-      expect(date).toBeDefined();
-      expect(username).toEqual('dicoding');
+      const dataThread = await threadRepositoryPostgres.getThreadById('thread-333');
+
+      expect(dataThread).toStrictEqual(new OneThread({
+        id: 'thread-333',
+        title: payload.title,
+        body: payload.body,
+        date: new Date(dataThread.date),
+        username: 'dicoding'
+      }))
+      expect(dataThread.id).toEqual('thread-333');
+      expect(dataThread.title).toEqual(payload.title);
+      expect(dataThread.body).toEqual(payload.body);
+      expect(dataThread.date).toBeDefined();
+      expect(dataThread.username).toEqual('dicoding');
     });
   });
 });

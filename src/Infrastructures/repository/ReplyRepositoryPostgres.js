@@ -3,7 +3,7 @@ const AuthorizationError = require('../../Commons/exceptions/AuthorizationError'
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 const ReplyRepository = require('../../Domains/replies/ReplyRepository');
 const CreatedComment = require('../../Domains/comments/entities/CreatedComment');
-const OneComment = require('../../Domains/comments/entities/OneComment');
+const OneReply = require('../../Domains/replies/entities/OneReply');
 
 class ReplyRepositoryPostgres extends ReplyRepository {
   constructor(pool, idGenerator) {
@@ -14,14 +14,14 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getAllRepliesByCommentId(commentId) {
     const query = {
-      text: 'SELECT a.id, a.date, CASE WHEN is_delete IS TRUE THEN $1 ELSE a.content END content, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $2 ORDER BY a.date ASC',
-      values: ['**balasan telah dihapus**', commentId],
+      text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY a.date ASC',
+      values: [commentId],
     };
     const { rows, rowCount } = await this._pool.query(query);
 
     if (!rowCount) return [];
 
-    return rows.map((e) => new OneComment(e));
+    return rows.map((e) => new OneReply(e));
   }
 
   async verifyUserId({ userId, replyId }) {
