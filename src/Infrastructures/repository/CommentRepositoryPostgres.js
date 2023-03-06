@@ -17,11 +17,8 @@ class CommentRepositoryPostgres extends CommentRepository {
       text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.thread_id = $1 ORDER BY a.date ASC',
       values: [threadId],
     };
-    const { rows: comments, rowCount } = await this._pool.query(query);
 
-    if (!rowCount) return [];
-
-    return comments.map((e) => new OneComment(e));
+    return (await this._pool.query(query)).rows;
   }
 
   async verifyUserId({ userId, commentId }) {

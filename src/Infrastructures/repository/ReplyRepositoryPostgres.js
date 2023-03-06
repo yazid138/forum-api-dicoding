@@ -12,16 +12,13 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     this._idGenerator = idGenerator;
   }
 
-  async getAllRepliesByCommentId(commentId) {
+  async getAllRepliesByCommentsId(commentsId) {
     const query = {
-      text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = $1 ORDER BY a.date ASC',
-      values: [commentId],
+      text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.comment_id = ANY($1::text[]) ORDER BY a.date ASC',
+      values: [commentsId],
     };
-    const { rows, rowCount } = await this._pool.query(query);
 
-    if (!rowCount) return [];
-
-    return rows.map((e) => new OneReply(e));
+    return (await this._pool.query(query)).rows;
   }
 
   async verifyUserId({ userId, replyId }) {
