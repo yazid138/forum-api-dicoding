@@ -3,7 +3,6 @@ const AuthorizationError = require('../../Commons/exceptions/AuthorizationError'
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const CreatedComment = require('../../Domains/comments/entities/CreatedComment');
-const OneComment = require('../../Domains/comments/entities/OneComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -14,7 +13,13 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getAllCommentsByThreadId(threadId) {
     const query = {
-      text: 'SELECT a.*, b.username FROM comments a JOIN users b ON a.user_id = b.id WHERE a.thread_id = $1 ORDER BY a.date ASC',
+      text: `SELECT a.*, b.username, count(c.id) likes 
+      FROM comments a 
+      JOIN users b ON a.user_id = b.id 
+      LEFT JOIN comment_likes c ON a.id = c.comment_id 
+      WHERE a.thread_id = $1 
+      GROUP BY a.id, b.username 
+      ORDER BY a.date ASC`,
       values: [threadId],
     };
 

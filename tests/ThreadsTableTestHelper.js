@@ -5,7 +5,7 @@ const ThreadsTableTestHelper = {
     async addThread({
         id = 'thread-123', title = 'dicoding', body = 'ini adalah body', userId,
     }) {
-        const date = new Date().toISOString()
+        const date = new Date('2023-03-08').toISOString()
         const query = {
             text: 'INSERT INTO threads(id, title, body, user_id, date) VALUES($1, $2, $3, $4, $5) RETURNING id',
             values: [id, title, body, userId, date],

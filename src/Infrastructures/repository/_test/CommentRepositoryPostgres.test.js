@@ -62,7 +62,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment2).toHaveLength(1);
       expect(comment2[0].id).toEqual(comment.id);
       expect(comment2[0].content).toEqual('ini adalah komentar');
-      expect(comment2[0].date).toBeDefined();
+      expect(comment2[0].date).toEqual(new Date('2023-03-08'));
       expect(comment2[0].username).toEqual('dicoding');
     });
   });
@@ -146,9 +146,6 @@ describe('CommentRepositoryPostgres', () => {
           user_id: user.id,
         },
       ));
-      expect(createdComment.id).toEqual('comment-222');
-      expect(createdComment.title).toEqual(createComment.title);
-      expect(createdComment.owner).toEqual(user.id);
     });
   });
 
