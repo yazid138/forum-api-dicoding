@@ -2,10 +2,8 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CreateThread = require('../../../Domains/threads/entities/CreateThread');
-const OneThread = require('../../../Domains/threads/entities/OneThread');
 const CreatedThread = require('../../../Domains/threads/entities/CreatedThread');
 const pool = require('../../database/postgres/pool');
-const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
 describe('ThreadRepositoryPostgres', () => {
@@ -28,7 +26,7 @@ describe('ThreadRepositoryPostgres', () => {
   describe('verifyThreadId function', () => {
     let threadRepositoryPostgres = null;
     beforeEach(() => {
-      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, {});
+      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
     });
 
     it('should throw NotFoundError when thread id not exists', async () => {
@@ -62,7 +60,7 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should create thread not correctly', async () => {
       const fakeIdGenerator = () => '000';
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await expect(threadRepositoryPostgres.addThread({})).rejects.toThrowError();
@@ -70,7 +68,7 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should persist add thread and return thread data correctly', async () => {
       const fakeIdGenerator = () => '111';
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await threadRepositoryPostgres.addThread(createThread);
@@ -112,26 +110,26 @@ describe('ThreadRepositoryPostgres', () => {
 
       await ThreadsTableTestHelper.addThread(payload);
 
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
-      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {}, commentRepositoryPostgres);
+      threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
     });
 
     it('should null when thread id not sent', async () => {
       // Action & Assert
-      await expect(threadRepositoryPostgres.getThreadById()).resolves.toBeNull();
+      await expect(threadRepositoryPostgres.getThreadById()).resolves.toBeUndefined();
     });
 
     it('should thread object correctly', async () => {
       // Action & Assert
       const dataThread = await threadRepositoryPostgres.getThreadById('thread-333');
 
-      expect(dataThread).toStrictEqual(new OneThread({
+      expect(dataThread).toStrictEqual({
         id: 'thread-333',
         title: payload.title,
         body: payload.body,
         date: new Date(dataThread.date),
+        user_id: 'user-123',
         username: 'dicoding'
-      }))
+      })
       expect(dataThread.id).toEqual('thread-333');
       expect(dataThread.title).toEqual(payload.title);
       expect(dataThread.body).toEqual(payload.body);

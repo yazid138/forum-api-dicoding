@@ -53,7 +53,7 @@ describe('ReplyRepositoryPostgres', () => {
     await pool.end();
   });
 
-  describe('getAllRepliesByCommentId function', () => {
+  describe('getAllRepliesByCommentsId function', () => {
     let replyRepositoryPostgres = null;
     beforeEach(() => {
       replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
@@ -61,24 +61,30 @@ describe('ReplyRepositoryPostgres', () => {
 
     it('should empty array when id not exists', async () => {
       // Action & Assert
-      const replies = await replyRepositoryPostgres.getAllRepliesByCommentId('comment-xxx');
+      const replies = await replyRepositoryPostgres.getAllRepliesByCommentsId(['comment-xxx']);
       expect(replies).toHaveLength(0);
     });
 
     it('should not empty array when id available', async () => {
-      const replies = await replyRepositoryPostgres.getAllRepliesByCommentId(comment.id);
+      const replies = await replyRepositoryPostgres.getAllRepliesByCommentsId([comment.id]);
       expect(replies).toHaveLength(1);
-      expect(replies[0].id).toEqual('reply-123');
-      expect(replies[0].username).toEqual('dicoding');
-      expect(replies[0].date).toBeDefined();
-      expect(replies[0].content).toEqual('ini adalah balasan komentar');
+      expect(replies).toStrictEqual([{
+        id: 'reply-123',
+        username: 'dicoding',
+        date: new Date('2023-03-07T17:00:00.000Z'),
+        content: 'ini adalah balasan komentar',
+        is_delete: false,
+        user_id: user.id,
+        thread_id: null,
+        comment_id: comment.id
+      }])
     });
   });
 
   describe('verifyUserId function', () => {
     let replyRepositoryPostgres = null;
     beforeEach(() => {
-      replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
+      replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
     });
 
     it('should throw AuthorizationError when user not allow', async () => {
@@ -95,7 +101,7 @@ describe('ReplyRepositoryPostgres', () => {
   describe('verifyReplyId function', () => {
     let replyRepositoryPostgres = null;
     beforeEach(() => {
-      replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
+      replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
     });
 
     it('should throw AuthorizationError when reply not exists', async () => {
@@ -121,7 +127,7 @@ describe('ReplyRepositoryPostgres', () => {
 
     it('should create reply not correctly', async () => {
       const fakeIdGenerator = () => '000';
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator, {});
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await expect(replyRepositoryPostgres.addReplyComment({})).rejects.toThrowError();
@@ -129,7 +135,7 @@ describe('ReplyRepositoryPostgres', () => {
 
     it('should persist add reply and return reply data correctly', async () => {
       const fakeIdGenerator = () => '111';
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator, {});
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await replyRepositoryPostgres.addReplyComment(createReplyComment);
@@ -168,7 +174,7 @@ describe('ReplyRepositoryPostgres', () => {
         content: 'ini adalah balasan komentar',
       });
 
-      replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, {});
+      replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
     });
 
     it('should if empty params', async () => {

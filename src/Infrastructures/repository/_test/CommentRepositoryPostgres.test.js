@@ -3,7 +3,6 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
-const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CreateComment = require('../../../Domains/comments/entities/CreateComment');
@@ -47,8 +46,7 @@ describe('CommentRepositoryPostgres', () => {
   describe('getAllCommentsByThreadId function', () => {
     let commentRepositoryPostgres = null;
     beforeEach(() => {
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
-      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, replyRepositoryPostgres);
+      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
     });
 
     it('should empty array when id not exists', async () => {
@@ -60,17 +58,24 @@ describe('CommentRepositoryPostgres', () => {
     it('should not empty array when id available', async () => {
       const comment2 = await commentRepositoryPostgres.getAllCommentsByThreadId(thread.id);
       expect(comment2).toHaveLength(1);
-      expect(comment2[0].id).toEqual(comment.id);
-      expect(comment2[0].content).toEqual('ini adalah komentar');
-      expect(comment2[0].date).toEqual(new Date('2023-03-08'));
-      expect(comment2[0].username).toEqual('dicoding');
+      expect(comment2).toStrictEqual([{
+        id: comment.id,
+        content: 'ini adalah komentar',
+        date: new Date('2023-03-07T17:00:00.000Z'),
+        username: 'dicoding',
+        is_delete: false,
+        likes: "0",
+        thread_id: thread.id,
+        user_id: user.id,
+        comment_id: null,
+      }]);
     });
   });
 
   describe('verifyUserId function', () => {
     let commentRepositoryPostgres = null;
     beforeEach(() => {
-      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
     });
 
     it('should throw AuthorizationError when user not allow', async () => {
@@ -87,7 +92,7 @@ describe('CommentRepositoryPostgres', () => {
   describe('verifyCommentId function', () => {
     let commentRepositoryPostgres = null;
     beforeEach(() => {
-      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
     });
 
     it('should throw AuthorizationError when comment not exists', async () => {
@@ -113,7 +118,7 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should create comment not correctly', async () => {
       const fakeIdGenerator = () => '000';
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await expect(commentRepositoryPostgres.addComment({})).rejects.toThrowError();
@@ -121,7 +126,7 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should persist add comment and return comment data correctly', async () => {
       const fakeIdGenerator = () => '111';
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator, {});
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await commentRepositoryPostgres.addComment(createComment);
@@ -160,7 +165,7 @@ describe('CommentRepositoryPostgres', () => {
         content: 'ini adalah komentar',
       });
 
-      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, {});
+      commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
     });
 
     it('should throw NotFoundError when comment id not exists', async () => {

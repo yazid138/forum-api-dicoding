@@ -1,7 +1,7 @@
 const InvariantError = require('../../Commons/exceptions/InvariantError');
-const CommentRepository = require('../../Domains/comments/CommentRepository');
+const LikeCommentRepository = require('../../Domains/like-comments/LikeCommentRepository');
 
-class LikeCommentRepositoryPostgres extends CommentRepository {
+class LikeCommentRepositoryPostgres extends LikeCommentRepository {
     constructor(pool, idGenerator) {
         super();
         this._pool = pool;
@@ -21,11 +21,11 @@ class LikeCommentRepositoryPostgres extends CommentRepository {
         const id = `like-${this._idGenerator()}`;
 
         const query = {
-            text: 'INSERT INTO comment_likes(id, comment_id, user_id) VALUES($1, $2, $3) RETURNING id',
+            text: 'INSERT INTO comment_likes(id, comment_id, user_id) VALUES($1, $2, $3)',
             values: [id, commentId, userId],
         };
 
-        return (await this._pool.query(query)).rows[0];
+        await this._pool.query(query);
     }
 
     async removeLike(commentLikeId) {

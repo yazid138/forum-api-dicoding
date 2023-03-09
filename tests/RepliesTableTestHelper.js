@@ -5,7 +5,7 @@ const RepliesTableTestHelper = {
     async addReply({
         id = 'reply-123', commentId, userId, content = 'ini adalah komentar',
     }) {
-        const date = new Date().toISOString()
+        const date = new Date('2023-03-08').toISOString()
         const query = {
             text: 'INSERT INTO comments(id, comment_id, content, user_id, date) VALUES($1, $2, $3, $4, $5) RETURNING id',
             values: [id, commentId, content, userId, date],

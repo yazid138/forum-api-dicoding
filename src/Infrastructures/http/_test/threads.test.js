@@ -3,6 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
+const CommentLikesTableTestHelper = require('../../../../tests/CommentLikesTableTestHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
 
@@ -69,6 +70,7 @@ describe('/threads endpoint', () => {
   });
 
   afterAll(async () => {
+    await CommentLikesTableTestHelper.cleanTable();
     await RepliesTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
@@ -331,6 +333,34 @@ describe('/threads endpoint', () => {
       const response = await server.inject({
         method: 'DELETE',
         url: `/threads/${thread.id}/comments/${comment.id}/replies/${newReply.id}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+    });
+  });
+
+  describe('when PUT /threads/{threadId}/comments/{commentId}/likes', () => {
+    it('401', async () => {
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${thread.id}/comments/${comment.id}/likes`,
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(401);
+      expect(responseJson.error).toEqual('Unauthorized');
+      expect(responseJson.message).toEqual('Missing authentication');
+    });
+
+    it('200', async () => {
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${thread.id}/comments/${comment.id}/likes`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
