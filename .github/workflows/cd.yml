@@ -3,7 +3,7 @@ name: Continuous Deployment to Heroku
 on: 
   push:
     branches:
-      - master
+    - master
  
 jobs:
   deploy:
