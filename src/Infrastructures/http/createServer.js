@@ -32,7 +32,7 @@ const auth = async (server, name) => {
 
 const createServer = async (container) => {
   const server = Hapi.server({
-    host: process.env.HOST,
+    host: process.env.HOST || "0.0.0.0",
     port: process.env.PORT || 5000,
   });
 
