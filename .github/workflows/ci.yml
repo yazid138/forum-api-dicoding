@@ -24,7 +24,7 @@ jobs:
         
     - name: Install dependencies
       run: npm ci
-    - run: npm test
+    - run: npm run test
       env:
         PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
         PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
