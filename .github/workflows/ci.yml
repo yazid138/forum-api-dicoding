@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Continous Integration Node JS
 
 on:
   pull_request:
