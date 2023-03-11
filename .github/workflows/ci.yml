@@ -1,45 +1,18 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on:
-  push:
-    branches: 
-    - master
   pull_request:
     branches: 
     - master
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-    
-     # Service containers to run with `runner-job`
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
 
     strategy:
       matrix:
         node-version: 
         - 16.x
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v3
@@ -51,17 +24,18 @@ jobs:
         
     - name: Install dependencies
       run: npm ci
-      
-    - name: Connect to PostgreSQL
-      # Runs a script that creates a PostgreSQL table, populates
-      # the table with data, and then retrieves the data
-      run: npm migrate:test up
-      # Environment variables used by the `client.js` script to create
-      # a new PostgreSQL table.
-      env:
-        # The hostname used to communicate with the PostgreSQL service container
-        POSTGRES_HOST: localhost
-        # The default PostgreSQL port
-        POSTGRES_PORT: 5432
-        
     - run: npm test
+      env:
+        CI: true
+        PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
+        PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
+        PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
+        PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
+        PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
+        PGHOST: ${{ secrets.PGHOST }}
+        PGUSER: ${{ secrets.PGUSER }}
+        PGDATABASE: ${{ secrets.PGDATABASE }}
+        PGPASSWORD: ${{ secrets.PGPASSWORD }}
+        PGPORT: ${{ secrets.PGPORT }}
+        ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
+        REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
