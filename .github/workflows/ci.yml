@@ -26,7 +26,6 @@ jobs:
       run: npm ci
     - run: npm test
       env:
-        CI: true
         PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
         PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
         PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
