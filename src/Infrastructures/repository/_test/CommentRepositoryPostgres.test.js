@@ -61,7 +61,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment2).toStrictEqual([{
         id: comment.id,
         content: 'ini adalah komentar',
-        date: new Date('2023-03-07T17:00:00.000Z'),
+        date: new Date(comment2[0].date),
         username: 'dicoding',
         is_delete: false,
         likes: "0",

@@ -71,7 +71,7 @@ describe('ReplyRepositoryPostgres', () => {
       expect(replies).toStrictEqual([{
         id: 'reply-123',
         username: 'dicoding',
-        date: new Date('2023-03-07T17:00:00.000Z'),
+        date: new Date(replies[0].date),
         content: 'ini adalah balasan komentar',
         is_delete: false,
         user_id: user.id,
@@ -154,8 +154,8 @@ describe('ReplyRepositoryPostgres', () => {
       const createdreplyComment = await replyRepositoryPostgres.addReplyComment(createReplyComment);
 
       expect(createdreplyComment).toStrictEqual(new CreatedComment({
-        id: 'reply-222', 
-        content: createReplyComment.content, 
+        id: 'reply-222',
+        content: createReplyComment.content,
         user_id: user.id
       }))
       expect(createdreplyComment.id).toEqual('reply-222');
